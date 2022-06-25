@@ -1,6 +1,6 @@
 # oto-dom
 
-oto-dom.xlsx - w pierwszej zakładce ("Oferty") należy podać Linkę oraz unikaną nazwę dla oferty (bez znaków specjalnych).
+oto-dom.xlsx - w pierwszej zakładce ("Oferty") należy podać Link oraz unikaną Nazwę dla oferty (bez znaków specjalnych).
 
 
 Skrypt ("oto-dom.py") po uruchomieniu odczyta linki z pliku excel i ściągnie dane oferty z podanych linków. Dla każdej ofery stworzony zostanie oddzielny akrusz.
