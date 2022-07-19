@@ -1,23 +1,32 @@
+from time import sleep
 import my_functions
 import requests
 from bs4 import BeautifulSoup
 import pandas
 
-# dane_testowe = [
-#     {'Nazwa' : 'BRAK', 'Link': 'https://www.otodom.pl/pl/oferta/blisko-placu-narutowicza-ID4gMm5.html'},
-#     {'Nazwa': TEST1', 'Link': 'https://www.otodom.pl/pl/oferta/spokoj-i-bezpieczenstwo-dla-dwoch-rodzin-ID4gNwj'},
-#     {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
-#     {"Nazwa": "TEST2", "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-45-30-m-warszawa-ID4huua"}
-# ]
+dane_testowe = [
+    {
+        "Nazwa": "Lwowska",
+        "Link": "https://www.otodom.pl/pl/oferta/2-pok-kamienica-pl-politechniki-lwowska-metro-ID43OxW.html",
+    },
+    #  {'Nazwa': 'TEST1', 'Link': 'https://www.otodom.pl/pl/oferta/spokoj-i-bezpieczenstwo-dla-dwoch-rodzin-ID4gNwj'},
+    #  {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
+    #  {"Nazwa": "TEST2", "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-45-30-m-warszawa-ID4huua"}
+]
 
 PLIK_DANE = "oto-dom.xlsx"
 PLIK_LOG = "oto-dom.log"
 
 
 def readDataFromSite(url):
-    response = requests.get(url)
+    response = requests.get(
+        url,
+        headers={
+            "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.87 Safari/537.36"
+        },
+    )
     webpage = response.text
-    soup = BeautifulSoup(webpage, "html.parser")
+    soup = BeautifulSoup(webpage, "lxml")
 
     # Zapis kodu strony do pliku
     # with open("html.html", "w", encoding="utf-8") as f:
@@ -27,6 +36,8 @@ def readDataFromSite(url):
     elems = soup.select_one("header.css-1s2plby.eu6swcv26")
     if elems is None:
         elems = soup.select_one("header.css-1sgd721.eu6swcv25")
+    if elems is None:
+        elems = soup.select_one("header")
     if elems is not None:
         tytul = elems.select_one("h1").get_text().strip()
         cena = elems.select_one("strong.css-8qi9av.eu6swcv19").get_text().strip()
@@ -97,32 +108,34 @@ def logowanie(tekst, plik):
 
 
 def main():
-
+    TEST = False
     plik_logow = open(PLIK_LOG, "w")
 
     try:
-        # dane = dane_testowe
-        dane = my_functions.readLinksFromExcel(PLIK_DANE)
+        if TEST:
+            dane = dane_testowe
+        else:
+            dane = my_functions.readLinksFromExcel(PLIK_DANE)
     except FileNotFoundError:
         logowanie("Brak pliku danych: " + PLIK_DANE, plik_logow)
         dane = []
 
     if len(dane) > 0:
-        xl = pandas.ExcelFile(PLIK_DANE)
-        arkusze = xl.sheet_names
         try:
-            with pandas.ExcelWriter(
-                PLIK_DANE, mode="a", if_sheet_exists="overlay"
-            ) as writer:
-                for dom in dane:
-                    nazwa_oferty = dom["Nazwa"]
-                    logowanie(nazwa_oferty, plik_logow)
-                    strona_df = readDataFromSite(dom["Link"])
-                    if strona_df is None:
-                        logowanie(
-                            "--- Oferta nie istnieje na podanej stronie", plik_logow
-                        )
-                    else:
+            for dom in dane:
+                xl = pandas.ExcelFile(PLIK_DANE)
+                arkusze = xl.sheet_names
+
+                nazwa_oferty = dom["Nazwa"]
+                logowanie(nazwa_oferty, plik_logow)
+
+                strona_df = readDataFromSite(dom["Link"])
+                if strona_df is None:
+                    logowanie("--- Oferta nie istnieje na podanej stronie", plik_logow)
+                else:
+                    with pandas.ExcelWriter(
+                        PLIK_DANE, mode="a", if_sheet_exists="overlay"
+                    ) as writer:
                         if nazwa_oferty in arkusze:
                             plik_df = xl.parse(nazwa_oferty)
                             polaczony_df = pandas.concat([strona_df, plik_df])
