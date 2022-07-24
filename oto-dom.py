@@ -129,7 +129,12 @@ def main():
                 nazwa_oferty = dom["Nazwa"]
                 logowanie(nazwa_oferty, plik_logow)
 
-                strona_df = readDataFromSite(dom["Link"])
+                try:
+                    strona_df = readDataFromSite(dom["Link"])
+                except Exception as e:
+                    logowanie("Błąd odczytu strony: " + str(e), plik_logow)
+                    strona_df = None
+
                 if strona_df is None:
                     logowanie("--- Oferta nie istnieje na podanej stronie", plik_logow)
                 else:
