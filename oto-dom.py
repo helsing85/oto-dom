@@ -6,8 +6,8 @@ import pandas
 
 dane_testowe = [
     {
-        "Nazwa": "Lwowska",
-        "Link": "https://www.otodom.pl/pl/oferta/2-pok-kamienica-pl-politechniki-lwowska-metro-ID43OxW.html",
+        "Nazwa": "Archiwalna3",
+        "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-46-10-m-warszawa-ID4epQ9.html",
     },
     #  {'Nazwa': 'TEST1', 'Link': 'https://www.otodom.pl/pl/oferta/spokoj-i-bezpieczenstwo-dla-dwoch-rodzin-ID4gNwj'},
     #  {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
@@ -57,8 +57,11 @@ def readDataFromSite(url):
 
         # Opis
         # znak > oznacza że znacznik jest bezpośrednio niżej
-        elems = soup.select_one("section.css-3hljba.e1r1048u3 > div")
-        opis = elems.get_text().strip()
+        elems = soup.select_one("section.css-3hljba > div")
+        if elems is not None:
+            opis = elems.get_text().strip()
+        else:
+            opis = ">>>Błąd odczytu opisu oferty<<<"
 
         # Informacje dodatkowe
         # Spacja oznacza że znacznik jest gdzieś niżej
