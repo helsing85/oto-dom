@@ -3,11 +3,12 @@ import my_functions
 import requests
 from bs4 import BeautifulSoup
 import pandas
+import chromedriver
 
 dane_testowe = [
     {
-        "Nazwa": "Archiwalna3",
-        "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-46-10-m-warszawa-ID4epQ9.html",
+        "Nazwa": "Ochota",
+        "Link": "https://www.otodom.pl/pl/oferta/ciche-kamienica-h280-hala-banacha-ID4hEHZ",
     },
     #  {'Nazwa': 'TEST1', 'Link': 'https://www.otodom.pl/pl/oferta/spokoj-i-bezpieczenstwo-dla-dwoch-rodzin-ID4gNwj'},
     #  {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
@@ -16,6 +17,11 @@ dane_testowe = [
 
 PLIK_DANE = "oto-dom.xlsx"
 PLIK_LOG = "oto-dom.log"
+
+
+def readDataFromSiteSelenium(url):
+    driver = chromedriver()
+    driver.get(url)
 
 
 def readDataFromSite(url):
@@ -46,7 +52,8 @@ def readDataFromSite(url):
 
         # Szczegóły ogłoszenia
         # Spacja oznacza że znacznik jest gdzieś niżej
-        elems = soup.select("div.css-wj4wb2.emxfhao1 div.css-1qzszy5.estckra8")
+        # elems = soup.select("div.css-wj4wb2.emxfhao1 div.css-1qzszy5.estckra8")
+        elems = soup.select("div.css-1qzszy5")
         pow = elems[1].get_text().strip()
         wlasnosc = elems[3].get_text().strip()
         pokoje = elems[5].get_text().strip()
@@ -111,7 +118,7 @@ def logowanie(tekst, plik):
 
 
 def main():
-    TEST = False
+    TEST = True
     plik_logow = open(PLIK_LOG, "w")
 
     try:

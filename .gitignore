@@ -5,3 +5,4 @@ oto-dom.log
 build/
 dist/
 oto-dom.spec
+chromedriver/chromedriver.exe
