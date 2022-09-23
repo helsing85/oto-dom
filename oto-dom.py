@@ -49,8 +49,8 @@ def readDataFromSiteSelenium(url):
         cena_m2 = DRV.find_element(
             by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/div[4]"
         ).text
-        
-        print(tytul,cena, lok, cena_m2)
+
+        print(tytul, cena, lok, cena_m2)
 
 
 def readDataFromSite(url):
