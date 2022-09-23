@@ -3,25 +3,54 @@ import my_functions
 import requests
 from bs4 import BeautifulSoup
 import pandas
-import chromedriver
+from webdriver import *
 
 dane_testowe = [
     {
         "Nazwa": "Ochota",
         "Link": "https://www.otodom.pl/pl/oferta/ciche-kamienica-h280-hala-banacha-ID4hEHZ",
     },
-    #  {'Nazwa': 'TEST1', 'Link': 'https://www.otodom.pl/pl/oferta/spokoj-i-bezpieczenstwo-dla-dwoch-rodzin-ID4gNwj'},
+    #  {"Nazwa": "TEST1", "Link": "https://www.otodom.pl/pl/oferta/spokoj-i-bezpieczenstwo-dla-dwoch-rodzin-ID4gNwj",},
     #  {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
-    #  {"Nazwa": "TEST2", "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-45-30-m-warszawa-ID4huua"}
+    {
+        "Nazwa": "TEST2",
+        "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-45-30-m-warszawa-ID4huua",
+    },
 ]
 
 PLIK_DANE = "oto-dom.xlsx"
 PLIK_LOG = "oto-dom.log"
+DRV = chromedriver()
 
 
 def readDataFromSiteSelenium(url):
-    driver = chromedriver()
-    driver.get(url)
+    DRV.get(url)
+
+    # Potwierdź cisteczka
+    confirm_button = DRV.find_elements(by=By.ID, value="onetrust-accept-btn-handler")
+    if len(confirm_button) > 0:
+        confirm_button[0].click()
+
+    # Tytuł
+    elem = DRV.find_elements(
+        by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/h1"
+    )
+    if len(elem) > 0:
+        tytul = elem[0].text
+
+        cena = DRV.find_element(
+            by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/strong"
+        ).text
+
+        lok = DRV.find_element(
+            by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/div[3]/a"
+        ).text
+
+        cena_m2 = DRV.find_element(
+            by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/div[4]"
+        ).text
+        
+        print(tytul,cena, lok, cena_m2)
 
 
 def readDataFromSite(url):
@@ -140,7 +169,7 @@ def main():
                 logowanie(nazwa_oferty, plik_logow)
 
                 try:
-                    strona_df = readDataFromSite(dom["Link"])
+                    strona_df = readDataFromSiteSelenium(dom["Link"])
                 except Exception as e:
                     logowanie("Błąd odczytu strony: " + str(e), plik_logow)
                     strona_df = None
