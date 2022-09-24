@@ -23,6 +23,10 @@ PLIK_LOG = "oto-dom.log"
 DRV = chromedriver()
 
 
+def textByXpath(value):
+    return DRV.find_element(by=By.XPATH, value=value).text
+
+
 def readDataFromSiteSelenium(url):
     DRV.get(url)
 
@@ -37,20 +41,78 @@ def readDataFromSiteSelenium(url):
     )
     if len(elem) > 0:
         tytul = elem[0].text
+        cena = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/strong")
+        lok = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/div[3]/a")
+        cena_m2 = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/div[4]")
 
-        cena = DRV.find_element(
-            by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/strong"
-        ).text
+        # Szczegóły ogłoszenia
+        pow = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[1]/div[2]"
+        )
+        wlasnosc = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[2]/div[2]"
+        )
+        pokoje = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[3]/div[2]"
+        )
+        wykonczenie = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[4]/div[2]"
+        )
+        pietro = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[5]/div[2]"
+        )
+        balkon = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[6]/div[2]"
+        )
+        garaz = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[8]/div[2]"
+        )
 
-        lok = DRV.find_element(
-            by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/div[3]/a"
-        ).text
+        # Opis
+        opis = textByXpath("/html/body/div[1]/main/div[3]/div[2]/section[2]/div/div")
 
-        cena_m2 = DRV.find_element(
-            by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/div[4]"
-        ).text
+        # Informacje dodatkowe
+        rynek = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[3]/div/div[1]/div[2]"
+        )
+        ogloszenie = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[3]/div/div[2]/div[2]"
+        )
+        winda = textByXpath(
+            "/html/body/div[1]/main/div[3]/div[2]/div[3]/div/div[7]/div[2]"
+        )
 
-        print(tytul, cena, lok, cena_m2)
+        # print(tytul,cena, lok, cena_m2)
+        # print(pow, wlasnosc, pokoje, wykonczenie, pietro, balkon, garaz)
+        # print(rynek, ogloszenie, winda)
+        # print(opis)
+
+        dane_strony = [
+            {
+                "Data": my_functions.getCurrentTime(),
+                "Tytuł": tytul,
+                "Cena": cena,
+                "Cena/m²": cena_m2,
+                "Powierzchnia": pow,
+                "Lokalizacja": lok,
+                "Typ ogłoszenia": ogloszenie,
+                "Własność": wlasnosc,
+                "Liczba pokoi": pokoje,
+                "Wykończenie": wykonczenie,
+                "Piętro": pietro,
+                "Balkon": balkon,
+                "Garaż": garaz,
+                "Winda": winda,
+                "Rynek": rynek,
+                "Opis": opis,
+            }
+        ]
+
+        df = pandas.DataFrame(dane_strony)
+
+        print(df)
+
+        return df
 
 
 def readDataFromSite(url):
@@ -147,7 +209,7 @@ def logowanie(tekst, plik):
 
 
 def main():
-    TEST = True
+    TEST = False
     plik_logow = open(PLIK_LOG, "w")
 
     try:
