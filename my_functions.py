@@ -1,3 +1,6 @@
+import datetime
+
+
 def readLinksFromCSV(filepath):
     import pandas
 
@@ -23,7 +26,5 @@ def readLinksFromExcel(filepath):
 
 
 def getCurrentTime():
-    import datetime
-
     now = datetime.datetime.now()
     return now.strftime("%Y-%m-%d %H:%M:%S")
