@@ -39,7 +39,7 @@ def readDataFromSiteSelenium(url):
     if len(elem) > 0:
         tytul = elem[0].text
         cena = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/strong")
-        lok = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/div[3]/a")
+        lok = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/div[3]")
         cena_m2 = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/div[4]")
 
         # Szczegóły ogłoszenia
@@ -107,7 +107,7 @@ def readDataFromSiteSelenium(url):
 
         df = pandas.DataFrame(dane_strony)
 
-        print(df)
+        # print(df)
 
         return df
 

@@ -7,3 +7,5 @@ Skrypt ("oto-dom.py") po uruchomieniu odczyta linki z pliku excel i ściągnie d
 Nowe dane będą dodawane na początku arkusza. Każde uruchomienie skryptu doda nowy wiersz z danymi.
 
 Przy działaniu tworzony jest plik "oto-dom.log" z podstawowymi logami z pracy aplikacji. Tam można sprawdzić że jakaś oferta wygasła i nie znaleiozno jej danych.
+
+Do działania potrzebny jest webdriver przeglądarki. Póki co obsługiwany jest tylko Google Chrome.
