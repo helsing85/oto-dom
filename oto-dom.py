@@ -4,10 +4,13 @@ from webdriver import *
 
 dane_testowe = [
     {
-        "Nazwa": "Ochota",
-        "Link": "https://www.otodom.pl/pl/oferta/ciche-kamienica-h280-hala-banacha-ID4hEHZ",
+        "Nazwa": "Barska",
+        "Link": "https://www.otodom.pl/pl/oferta/stara-ochota-kamienica-54-m2-2-pok-ID4hFG3",
     },
-    #  {"Nazwa": "TEST1", "Link": "https://www.otodom.pl/pl/oferta/spokoj-i-bezpieczenstwo-dla-dwoch-rodzin-ID4gNwj",},
+    {
+        "Nazwa": "Jankowska",
+        "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-3-pokojowe-ochota-ul-jankowska-ID4hj5U",
+    },
     #  {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
     {
         "Nazwa": "TEST2",
@@ -20,8 +23,8 @@ PLIK_LOG = "oto-dom.log"
 DRV = chromedriver()
 
 
-def textByXpath(value):
-    return DRV.find_element(by=By.XPATH, value=value).text
+def elementsByXpath(value):
+    return DRV.find_elements(by=By.XPATH, value=value)
 
 
 def readDataFromSiteSelenium(url):
@@ -33,51 +36,45 @@ def readDataFromSiteSelenium(url):
         confirm_button[0].click()
 
     # Tytuł
-    elem = DRV.find_elements(
-        by=By.XPATH, value="/html/body/div[1]/main/div[3]/div[2]/header/h1"
-    )
+    elem = DRV.find_elements(by=By.TAG_NAME, value="header")
     if len(elem) > 0:
-        tytul = elem[0].text
-        cena = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/strong")
-        lok = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/div[3]")
-        cena_m2 = textByXpath("/html/body/div[1]/main/div[3]/div[2]/header/div[4]")
+        tytul = elem[0].find_element(by=By.TAG_NAME, value="h1").text
+        cena = elem[0].find_element(by=By.TAG_NAME, value="strong").text
+        lok = elem[0].find_element(by=By.XPATH, value="./div[3]").text
+        cena_m2 = elem[0].find_element(by=By.XPATH, value="./div[4]").text
 
         # Szczegóły ogłoszenia
-        pow = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[1]/div[2]"
-        )
-        wlasnosc = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[2]/div[2]"
-        )
-        pokoje = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[3]/div[2]"
-        )
-        wykonczenie = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[4]/div[2]"
-        )
-        pietro = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[5]/div[2]"
-        )
-        balkon = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[6]/div[2]"
-        )
-        garaz = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[1]/div/div[8]/div[2]"
-        )
+        elem = elementsByXpath("/html/body/div[1]/main/div[2]/div[2]/div[1]/div")
+        if len(elem) == 0:
+            elem = elementsByXpath("/html/body/div[1]/main/div[3]/div[2]/div[1]/div")
+
+        pow = elem[0].find_element(by=By.XPATH, value="./div[1]/div[2]").text
+        wlasnosc = elem[0].find_element(by=By.XPATH, value="./div[2]/div[2]").text
+        pokoje = elem[0].find_element(by=By.XPATH, value="./div[3]/div[2]").text
+        wykonczenie = elem[0].find_element(by=By.XPATH, value="./div[4]/div[2]").text
+        pietro = elem[0].find_element(by=By.XPATH, value="./div[5]/div[2]").text
+        balkon = elem[0].find_element(by=By.XPATH, value="./div[6]/div[2]").text
+        garaz = elem[0].find_element(by=By.XPATH, value="./div[8]/div[2]").text
 
         # Opis
-        opis = textByXpath("/html/body/div[1]/main/div[3]/div[2]/section[2]/div/div")
+        elem = elementsByXpath(
+            "/html/body/div[1]/main/div[2]/div[2]/section[2]/div/div"
+        )
+        if len(elem) == 0:
+            elem = elementsByXpath(
+                "/html/body/div[1]/main/div[3]/div[2]/section[2]/div/div"
+            )
+
+        opis = elem[0].text
 
         # Informacje dodatkowe
-        rynek = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[3]/div/div[1]/div[2]"
-        )
-        ogloszenie = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[3]/div/div[2]/div[2]"
-        )
-        winda = textByXpath(
-            "/html/body/div[1]/main/div[3]/div[2]/div[3]/div/div[7]/div[2]"
-        )
+        elem = elementsByXpath("/html/body/div[1]/main/div[2]/div[2]/div[3]/div")
+        if len(elem) == 0:
+            elem = elementsByXpath("/html/body/div[1]/main/div[3]/div[2]/div[3]/div")
+
+        rynek = elem[0].find_element(by=By.XPATH, value="./div[1]/div[2]").text
+        ogloszenie = elem[0].find_element(by=By.XPATH, value="./div[2]/div[2]").text
+        winda = elem[0].find_element(by=By.XPATH, value="./div[7]/div[2]").text
 
         # print(tytul,cena, lok, cena_m2)
         # print(pow, wlasnosc, pokoje, wykonczenie, pietro, balkon, garaz)
