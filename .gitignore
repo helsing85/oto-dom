@@ -7,3 +7,4 @@ build/
 dist/
 oto-dom.spec
 
+oto-dom*.exe
