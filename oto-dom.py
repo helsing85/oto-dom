@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 import my_functions
 import pandas
 from webdriver import *
@@ -57,15 +58,12 @@ def readDataFromSiteSelenium(url):
         garaz = elem[0].find_element(by=By.XPATH, value="./div[8]/div[2]").text
 
         # Opis
-        elem = elementsByXpath(
-            "/html/body/div[1]/main/div[2]/div[2]/section[2]/div/div"
-        )
-        if len(elem) == 0:
-            elem = elementsByXpath(
-                "/html/body/div[1]/main/div[3]/div[2]/section[2]/div/div"
-            )
-
-        opis = elem[0].text
+        elems = DRV.find_elements(by=By.TAG_NAME, value="section")
+        opis = ""
+        for elem in elems:
+            if elem.text.startswith("Opis"):
+                opis = elem.find_element(by=By.XPATH, value="./div").text
+                break
 
         # Informacje dodatkowe
         elem = elementsByXpath("/html/body/div[1]/main/div[2]/div[2]/div[3]/div")
