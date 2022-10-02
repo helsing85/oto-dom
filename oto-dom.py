@@ -3,22 +3,6 @@ import my_functions
 import pandas
 from webdriver import *
 
-dane_testowe = [
-    {
-        "Nazwa": "Barska",
-        "Link": "https://www.otodom.pl/pl/oferta/stara-ochota-kamienica-54-m2-2-pok-ID4hFG3",
-    },
-    {
-        "Nazwa": "Jankowska",
-        "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-3-pokojowe-ochota-ul-jankowska-ID4hj5U",
-    },
-    #  {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
-    {
-        "Nazwa": "TEST2",
-        "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-45-30-m-warszawa-ID4huua",
-    },
-]
-
 PLIK_DANE = "oto-dom.xlsx"
 PLIK_LOG = "oto-dom.log"
 DRV = browserDriver(headless=True)
@@ -126,15 +110,32 @@ def logowanie(tekst, plik):
     print(tekst)
 
 
+def daneOgloszen(test):
+    if test:
+        dane_testowe = [
+            {
+                "Nazwa": "Barska",
+                "Link": "https://www.otodom.pl/pl/oferta/stara-ochota-kamienica-54-m2-2-pok-ID4hFG3",
+            },
+            {
+                "Nazwa": "Jankowska",
+                "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-3-pokojowe-ochota-ul-jankowska-ID4hj5U",
+            },
+            #  {'Nazwa': 'TEST2', 'Link': 'https://www.otodom.pl/pl/oferta/nowe-mieszk-4pok-z-balkonem-i-tarasem-przy-lesie-ID49nnI'}
+            {
+                "Nazwa": "TEST2",
+                "Link": "https://www.otodom.pl/pl/oferta/mieszkanie-45-30-m-warszawa-ID4huua",
+            },
+        ]
+        return dane_testowe
+    else:
+        return my_functions.readLinksFromExcel(PLIK_DANE)
+
+
 def main():
-    TEST = False
-    plik_logow = open(PLIK_LOG, "w")
 
     try:
-        if TEST:
-            dane = dane_testowe
-        else:
-            dane = my_functions.readLinksFromExcel(PLIK_DANE)
+        dane = daneOgloszen(test=False)
     except FileNotFoundError:
         logowanie("Brak pliku danych: " + PLIK_DANE, plik_logow)
         dane = []
@@ -178,13 +179,16 @@ def main():
         logowanie("Brak ofert.", plik_logow)
 
     logowanie("--KONIEC--", plik_logow)
-    plik_logow.close()
 
 
 if __name__ == "__main__":
+    plik_logow = open(PLIK_LOG, "w")
+
     if type(DRV) is str:
-        print(DRV)
+        logowanie(str, plik_logow)
     else:
-        print(type(DRV))
+        logowanie(type(DRV), plik_logow)
         main()
         DRV.quit()
+
+    plik_logow.close()
