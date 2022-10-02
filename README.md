@@ -8,4 +8,5 @@ Nowe dane będą dodawane na początku arkusza. Każde uruchomienie skryptu doda
 
 Przy działaniu tworzony jest plik "oto-dom.log" z podstawowymi logami z pracy aplikacji. Tam można sprawdzić że jakaś oferta wygasła i nie znaleiozno jej danych.
 
-Do działania potrzebny jest webdriver przeglądarki. Póki co obsługiwany jest tylko Google Chrome.
+Do działania potrzebny jest webdriver przeglądarki. Obsługiwane są: Google Chrome, Microsoft Edge oraz Firefox.
+W tej kolejności skrypt automatycznie wybierze przeglądarkę na podstawie znelezionych plików w folderze 'webdriver'.
