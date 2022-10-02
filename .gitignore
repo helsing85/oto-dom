@@ -3,6 +3,7 @@ __pycache__/
 oto-dom.log
 chromedriver.exe
 msedgedriver.exe
+geckodriver.exe
 
 build/
 dist/
