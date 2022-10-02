@@ -5,7 +5,6 @@ from webdriver import *
 
 PLIK_DANE = "oto-dom.xlsx"
 PLIK_LOG = "oto-dom.log"
-DRV = browserDriver(headless=True)
 
 
 def elementsByXpath(value):
@@ -184,6 +183,7 @@ def main():
 if __name__ == "__main__":
     plik_logow = open(PLIK_LOG, "w")
 
+    DRV = browserDriver(headless=True)
     if type(DRV) is str:
         logowanie(str, plik_logow)
     else:
