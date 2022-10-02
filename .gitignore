@@ -8,3 +8,4 @@ dist/
 oto-dom.spec
 
 oto-dom*.exe
+webdriver/*.zip
