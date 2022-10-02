@@ -21,7 +21,7 @@ dane_testowe = [
 
 PLIK_DANE = "oto-dom.xlsx"
 PLIK_LOG = "oto-dom.log"
-DRV = chromedriver()
+DRV = browserDriver(headless=True)
 
 
 def elementsByXpath(value):
@@ -182,5 +182,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
-    DRV.quit()
+    if type(DRV) is str:
+        print(DRV)
+    else:
+        print(type(DRV))
+        main()
+        DRV.quit()
