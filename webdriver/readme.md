@@ -8,6 +8,6 @@ place the 'chromedriver.exe' file in the 'webdriver' directory.
 https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/
 place the 'msedgedriver.exe' file in the 'webdriver' directory.
 
-#Firefox
+# Firefox
 https://github.com/mozilla/geckodriver/releases
 place the 'geckodriver.exe' file in the 'webdriver' directory.
