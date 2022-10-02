@@ -36,6 +36,9 @@ def readDataFromSiteSelenium(url):
     if len(confirm_button) > 0:
         confirm_button[0].click()
 
+    # Przesuń stronę na dół
+    # DRV.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+
     # Tytuł
     elem = DRV.find_elements(by=By.TAG_NAME, value="header")
     if len(elem) > 0:
@@ -74,9 +77,18 @@ def readDataFromSiteSelenium(url):
         ogloszenie = elem[0].find_element(by=By.XPATH, value="./div[2]/div[2]").text
         winda = elem[0].find_element(by=By.XPATH, value="./div[7]/div[2]").text
 
+        # Daty
+        dodano = DRV.find_element(
+            by=By.XPATH, value="//div[contains(text(),'Data dodania')]"
+        ).text.removeprefix("Data dodania: ")
+        aktualizacja = DRV.find_element(
+            by=By.XPATH, value="//div[contains(text(),'Data aktualizacji')]"
+        ).text.removeprefix("Data aktualizacji: ")
+
         # print(tytul,cena, lok, cena_m2)
         # print(pow, wlasnosc, pokoje, wykonczenie, pietro, balkon, garaz)
         # print(rynek, ogloszenie, winda)
+        # print(dodano, aktualizacja)
         # print(opis)
 
         dane_strony = [
@@ -96,6 +108,8 @@ def readDataFromSiteSelenium(url):
                 "Garaż": garaz,
                 "Winda": winda,
                 "Rynek": rynek,
+                "Dodano": dodano,
+                "Aktualizacja": aktualizacja,
                 "Opis": opis,
             }
         ]
