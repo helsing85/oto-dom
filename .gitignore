@@ -2,6 +2,7 @@ venv64/
 __pycache__/
 oto-dom.log
 chromedriver.exe
+msedgedriver.exe
 
 build/
 dist/
