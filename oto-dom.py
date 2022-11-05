@@ -11,6 +11,15 @@ def elementsByXpath(value):
     return DRV.find_elements(by=By.XPATH, value=value)
 
 
+def tryFindElementByXpath(value):
+    try:
+        txt = DRV.find_element(by=By.XPATH, value=value).text
+    except NoSuchElementException:
+        txt = "brak danych"
+
+    return txt
+
+
 def readDataFromSiteSelenium(url):
     DRV.get(url)
 
@@ -55,13 +64,11 @@ def readDataFromSiteSelenium(url):
                 break
 
         # Informacje dodatkowe
-        elem = elementsByXpath("/html/body/div[1]/main/div[2]/div[2]/div[3]/div")
-        if len(elem) == 0:
-            elem = elementsByXpath("/html/body/div[1]/main/div[3]/div[2]/div[3]/div")
-
-        rynek = elem[0].find_element(by=By.XPATH, value="./div[1]/div[2]").text
-        ogloszenie = elem[0].find_element(by=By.XPATH, value="./div[2]/div[2]").text
-        winda = elem[0].find_element(by=By.XPATH, value="./div[7]/div[2]").text
+        rynek = tryFindElementByXpath("//div[@aria-label='Rynek']/div[2]")
+        ogloszenie = tryFindElementByXpath(
+            "//div[@aria-label='Typ ogłoszeniodawcy']/div[2]"
+        )
+        winda = tryFindElementByXpath("//div[@aria-label='Winda']/div[2]")
 
         # Daty
         dodano = DRV.find_element(
