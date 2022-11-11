@@ -1,7 +1,7 @@
 dane_testowe = [
     {
-        "Nazwa": "Chotomowska",
-        "Link": "https://www.otodom.pl/pl/oferta/stara-ochota-kamienica-cisza-zielen-od-zaraz-ID4hU5f",
+        "Nazwa": "Korotyńskiego",
+        "Link": "https://www.otodom.pl/pl/oferta/sloneczne-i-ciche-w-zielonej-okolicy-remont-ID4j7E7",
     },
     # {
     #     "Nazwa": "Barska",
