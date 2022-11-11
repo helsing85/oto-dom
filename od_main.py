@@ -85,6 +85,34 @@ def readDataFromSiteSelenium(url):
         # print(dodano, aktualizacja)
         # print(opis)
 
+        # Odkryj numer telefonu
+        phone_button = DRV.find_elements(
+            by=By.XPATH,
+            value="//a[contains(text(),'Zadzwoń')]",
+        )
+        if len(phone_button) > 0:
+            phone_button = DRV.find_element(
+                by=By.XPATH,
+                value="//a[contains(text(),'Zadzwoń')]",
+            )
+            telefon = phone_button.get_attribute("href").removeprefix("tel:")
+        else:
+            phone_button = DRV.find_elements(
+                by=By.XPATH,
+                value="//button[@data-cy='phone-number.show-full-number-button']",
+            )
+            if len(phone_button) > 0:
+                WebDriverWait(DRV, 20).until(
+                    EC.element_to_be_clickable(phone_button[0])
+                )
+                try:
+                    phone_button[0].click()
+                    telefon = tryFindElementByXpath(
+                        "//span[@data-cy='phone-number.full-phone-number']"
+                    )
+                except:
+                    telefon = "brak danych"
+
         dane_strony = [
             {
                 "Data": od_functions.getCurrentTime(),
@@ -104,6 +132,7 @@ def readDataFromSiteSelenium(url):
                 "Rynek": rynek,
                 "Dodano": dodano,
                 "Aktualizacja": aktualizacja,
+                "Telefon": telefon,
                 "Opis": opis,
             }
         ]
