@@ -11,3 +11,4 @@ oto-dom.spec
 
 oto-dom*.exe
 webdriver/*.zip
+od_test.py
