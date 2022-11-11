@@ -86,7 +86,7 @@ def readDataFromSiteSelenium(url):
 
         dane_strony = [
             {
-                "Data": my_functions.getCurrentTime(),
+                "Data": od_functions.getCurrentTime(),
                 "Tytuł": tytul,
                 "Cena": cena,
                 "Cena/m²": cena_m2,
