@@ -1,7 +1,7 @@
 from asyncio.windows_events import NULL
-import my_functions
 import pandas
-from webdriver import *
+import od_functions
+from od_webdriver import *
 
 PLIK_DANE = "oto-dom.xlsx"
 PLIK_LOG = "oto-dom.log"
@@ -145,7 +145,7 @@ def daneOgloszen(test):
         ]
         return dane_testowe
     else:
-        return my_functions.readLinksFromExcel(PLIK_DANE)
+        return od_functions.readLinksFromExcel(PLIK_DANE)
 
 
 def main():
