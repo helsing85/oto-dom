@@ -7,7 +7,7 @@ geckodriver.exe
 
 build/
 dist/
-oto-dom.spec
+*.spec
 
 oto-dom*.exe
 webdriver/*.zip
