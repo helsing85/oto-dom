@@ -30,39 +30,44 @@ def readDataFromSiteSelenium(url):
         confirm_button[0].click()
 
     # Przesuń stronę na dół
-    # DRV.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+    DRV.execute_script("window.scrollTo(0,document.body.scrollHeight)")
 
     # Tytuł
     elem = DRV.find_elements(by=By.TAG_NAME, value="header")
     if len(elem) > 0:
         try:
-            tytul = elem[0].find_element(by=By.TAG_NAME, value="h1").text
-            cena = elem[0].find_element(by=By.TAG_NAME, value="strong").text
-            lok = elem[0].find_element(by=By.XPATH, value="./div[3]").text
-            cena_m2 = elem[0].find_element(by=By.XPATH, value="./div[4]").text
+            tytul = tryFindElementByXpath("//h1[@data-cy='adPageAdTitle']")
+            cena = tryFindElementByXpath("//strong[@aria-label='Cena']")
+            lok = tryFindElementByXpath("//a[@aria-label='Adres']")
+            cena_m2 = tryFindElementByXpath(
+                "//div[@aria-label='Cena za metr kwadratowy']"
+            )
         except NoSuchElementException as e:
             return
 
         # Szczegóły ogłoszenia
-        elem = elementsByXpath("/html/body/div[1]/main/div[2]/div[2]/div[1]/div")
-        if len(elem) == 0:
-            elem = elementsByXpath("/html/body/div[1]/main/div[3]/div[2]/div[1]/div")
-
-        pow = elem[0].find_element(by=By.XPATH, value="./div[1]/div[2]").text
-        wlasnosc = elem[0].find_element(by=By.XPATH, value="./div[2]/div[2]").text
-        pokoje = elem[0].find_element(by=By.XPATH, value="./div[3]/div[2]").text
-        wykonczenie = elem[0].find_element(by=By.XPATH, value="./div[4]/div[2]").text
-        pietro = elem[0].find_element(by=By.XPATH, value="./div[5]/div[2]").text
-        balkon = elem[0].find_element(by=By.XPATH, value="./div[6]/div[2]").text
-        garaz = elem[0].find_element(by=By.XPATH, value="./div[8]/div[2]").text
+        pow = tryFindElementByXpath("//div[@aria-label='Powierzchnia']/div[2]")
+        wlasnosc = tryFindElementByXpath("//div[@aria-label='Forma własności']/div[2]")
+        pokoje = tryFindElementByXpath("//div[@aria-label='Liczba pokoi']/div[2]")
+        wykonczenie = tryFindElementByXpath(
+            "//div[@aria-label='Stan wykończenia']/div[2]"
+        )
+        pietro = tryFindElementByXpath("//div[@aria-label='Piętro']/div[2]")
+        balkon = tryFindElementByXpath(
+            "//div[@aria-label='Balkon / ogród / taras']/div[2]"
+        )
+        garaz = tryFindElementByXpath("//div[@aria-label='Miejsce parkingowe']/div[2]")
 
         # Opis
-        elems = DRV.find_elements(by=By.TAG_NAME, value="section")
-        opis = ""
-        for elem in elems:
-            if elem.text.startswith("Opis"):
-                opis = elem.find_element(by=By.XPATH, value="./div").text
-                break
+        # Pokaż więcej
+        show_span = DRV.find_elements(
+            by=By.XPATH, value="//span[contains(text(),'Pokaż więcej')]"
+        )
+        if len(show_span) > 0:
+            show_button = show_span[0].find_element(by=By.XPATH, value="./..")
+            show_button.click()
+
+        opis = tryFindElementByXpath("//div[@data-testid='content-container']")
 
         # Informacje dodatkowe
         rynek = tryFindElementByXpath("//div[@aria-label='Rynek']/div[2]")
@@ -210,6 +215,7 @@ if __name__ == "__main__":
     plik_logow = open(PLIK_LOG, "w")
 
     DRV = browserDriver(headless=True)
+    DRV.maximize_window()
     if type(DRV) is str:
         logowanie(str, plik_logow)
     else:
